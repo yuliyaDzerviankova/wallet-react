@@ -15,6 +15,7 @@ authRouter.post(
     ],
     async (request, response) => {
         try {
+            console.log(errors)
             const errors = validationResult(request);
 
             if (!errors.isEmpty()) {
@@ -44,7 +45,7 @@ authRouter.post(
     });
 
 authRouter.post(
-    '/login.tsx',
+    '/login',
     [
         check('email', 'Enter valid email').normalizeEmail().isEmail(),
         check('password', 'Enter password').exists()

@@ -1,11 +1,35 @@
-import express from "express";
-import {getIcons, updateIcons} from "../controllers/icons.controller.js";
-import passport from 'passport';
+const {Router} = require("express");
+const {errorHandler} = require("../utils/errorHandler");
+const Icon = require('../models/Icon');
 
-const iconRouter = express.Router();
+const iconRouter = Router();
 
-iconRouter.use('/update', updateIcons);
-// iconRouter.use('/', passport.authenticate('jwt', {session: false}), getIcons);
-iconRouter.use('/', getIcons);
+iconRouter.put(
+    '/update',
+    async (request, response) => {
+        try {
+            const {icon, isUsed} = request.body;
+            const iconUpdate = await Icon.findOneAndUpdate(
+                {icon},
+                {$set: {icon, isUsed}},
+                {returnOriginal: false},
+            );
+            response.status(200).json(iconUpdate);
+        } catch (e) {
+            errorHandler(response, e);
+        }
 
-export default iconRouter;
+    });
+
+iconRouter.get(
+    '/',
+    async (request, response) => {
+        try {
+            const icons = await Icon.find({isUsed: false});
+            response.status(200).json(icons);
+        } catch (e) {
+            errorHandler(response, e);
+        }
+    });
+
+module.exports = iconRouter;

@@ -2,5 +2,5 @@
   "port": 5000,
   "jwtSecret": "jwt-secret-key",
   "baseUrl": "http://localhost:5000",
-  "mongoUri": "mongodb://localhost:27017/wallet"
+  "mongoUri": "mongodb+srv://Yuliya:supernatural2005@cluster0.dq2zv.mongodb.net/wallet?retryWrites=true&w=majority"
 }

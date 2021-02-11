@@ -1,8 +1,20 @@
-import express from "express";
-import {addWalletType} from "../controllers/walletType.controller.js";
+const {Router} = require("express");
+const WalletType = require("../models/WalletType");
+const {errorHandler} = require("../utils/errorHandler");
 
-const walletTypeRouter = express.Router();
+const walletTypeRouter = Router();
 
-walletTypeRouter.use('/add', addWalletType);
+walletTypeRouter.post(
+    '/add',
+    async (request, response) => {
+        try {
+            const {name} = request.body;
+            const walletType = await new WalletType({name});
+            walletType.save();
+            response.status(201).json(walletType);
+        } catch (e) {
+            errorHandler(response, e);
+        }
+    });
 
-export default walletTypeRouter;
+module.exports = walletTypeRouter;

@@ -1,11 +1,10 @@
-const mongoose = require("mongoose");
-const express = require("express");
+const {Router} = require("express");
 const auth = require("../middleware/auth.js");
 const {errorHandler} = require("../utils/errorHandler");
 const Wallet = require("../models/Wallet");
 const Expense = require("../models/Expense");
 
-const expenseRouter = express.Router();
+const expenseRouter = Router();
 
 expenseRouter.post(
     '/add',
@@ -22,19 +21,14 @@ expenseRouter.post(
                 date
             });
             expense.save();
-            Wallet.findOneAndUpdate(
+            await Wallet.findOneAndUpdate(
                 {_id: wallet._id},
                 {
                     $push: {
                         expenses: expense
                     }
-                }, {new: true, returnOriginal: false},
-                function (err, wallet) {
-                    mongoose.disconnect();
-                    if (err) return console.log(err);
-                    response.status(201).json(expense);
-                }
-            );
+                }, {new: true, returnOriginal: false});
+            response.status(201).json(expense);
         } catch (e) {
             errorHandler(response, e);
         }

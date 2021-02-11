@@ -1,6 +1,6 @@
 const {Schema, model} = require('mongoose');
 
-export const walletTypeScheme = new Schema({
+const walletTypeScheme = new Schema({
     name: {
         type: String,
         required: true

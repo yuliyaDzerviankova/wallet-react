@@ -1,6 +1,6 @@
 const {Schema, model} = require('mongoose');
 
-export const profitScheme = new Schema({
+const profitScheme = new Schema({
     profitType: {
         ref: 'ProfitType',
         type: Schema.Types.ObjectId

@@ -40,7 +40,7 @@ export default function AuthPage() {
     const login = async () => {
         try {
             const data = await request(
-                '/api/auth/login.tsx',
+                '/api/auth/login',
                 'POST',
                 {...form}
             );

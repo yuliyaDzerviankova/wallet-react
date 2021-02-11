@@ -16,13 +16,13 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use('/api/auth', require('./routes/auth.router'));
 app.use('/api/expenses', require('./routes/expense.router'));
 app.use('/api/users', require('./routes/user.router'));
-app.use('/api/expensesType', require('./routes/expenseTypeRouter.router'));
-app.use('/api/profitsType', require('./routes/user.profitTypeRouter'));
-app.use('/api/icons', require('./routes/iconRouter.router'));
-app.use('/api/profits', require('./routes/profitRouter.router'));
-app.use('/api/expenses', require('./routes/user.expenseRouter'));
-app.use('/api/wallets', require('./routes/walletRouter.router'));
-app.use('/api/walletsType', require('./routes/walletTypeRouter.router'));
+app.use('/api/expensesType', require('./routes/expenseType.router'));
+app.use('/api/profitsType', require('./routes/profitType.router'));
+app.use('/api/icons', require('./routes/icon.router'));
+app.use('/api/profits', require('./routes/profit.router'));
+app.use('/api/expenses', require('./routes/expense.router'));
+app.use('/api/wallets', require('./routes/wallet.router'));
+app.use('/api/walletsType', require('./routes/walletType.router'));
 
 if (process.env.NODE_ENV === 'production') {
     app.use('/', express.static(path.join(__dirname, 'wallet', 'build')));
@@ -36,6 +36,7 @@ async function start() {
     try {
         await mongoose.connect(config.get('mongoUri'), {
             useNewUrlParser: true,
+            useUnifiedTopology: true,
             useFindAndModify: false
         });
         app.listen(PORT, () => console.log(`Server has been started on port ${PORT}`));

@@ -1,18 +1,83 @@
-import express from "express";
-import {
-    addProfitType,
-    getProfitsType,
-    getProfitTypeById,
-    updateProfitType,
-    deleteProfitType
-} from "../controllers/profitType.controller.js";
+const {Router} = require("express");
+const {errorHandler} = require("../utils/errorHandler");
+const ProfitType = require('../models/ProfitType');
+const Icon = require('../models/Icon');
 
-const profitTypeRouter = express.Router();
+const profitTypeRouter = Router();
 
-profitTypeRouter.use('/update/:id', updateProfitType);
-profitTypeRouter.use('/delete/:id', deleteProfitType);
-profitTypeRouter.use('/add', addProfitType);
-profitTypeRouter.use('/:id', getProfitTypeById);
-profitTypeRouter.use('/', getProfitsType);
+profitTypeRouter.put(
+    '/update/:id',
+    async (request, response) => {
+        try {
+            const {id} = request.params;
+            const {body} = request;
+            const profitType = await ProfitType.findOneAndUpdate(
+                {_id: id},
+                {$set: {...body}},
+                {new: true}
+            );
+            response.status(200).json(profitType);
+        } catch (e) {
+            errorHandler(response, e);
+        }
+    });
 
-export default profitTypeRouter;
+profitTypeRouter.delete(
+    '/delete/:id',
+    async (request, response) => {
+        try {
+            const profitType = await ProfitType.findOne({_id: request.params.id});
+            await Icon.findOneAndUpdate(
+                {icon: profitType.icon},
+                {$set: {icon: profitType.icon, isUsed: false}},
+                {returnOriginal: false}
+            );
+            await ProfitType.deleteOne({_id: request.params.id});
+            response.status(200).json({
+                message: 'This profit was deleted'
+            });
+        } catch (e) {
+            errorHandler(response, e);
+        }
+    });
+
+profitTypeRouter.post(
+    '/add',
+    async (request, response) => {
+        try {
+            const {name, icon} = request.body;
+            const profitType = await new ProfitType({
+                name, icon
+            });
+            profitType.save();
+            const iconView = await new Icon({icon, isUsed: true});
+            updateIcons({body: iconView});
+            response.status(201).json(profitType);
+        } catch (e) {
+            errorHandler(response, e);
+        }
+    });
+
+profitTypeRouter.get(
+    '/:id',
+    async (request, response) => {
+        try {
+            const profitType = await ProfitType.findById({_id: request.params.id});
+            response.status(200).json(profitType);
+        } catch (e) {
+            errorHandler(response, e);
+        }
+    });
+
+profitTypeRouter.get(
+    '/',
+    async (request, response) => {
+        try {
+            const profits = await ProfitType.find({});
+            response.status(200).json(profits);
+        } catch (e) {
+            errorHandler(response, e);
+        }
+    });
+
+module.exports = profitTypeRouter;
