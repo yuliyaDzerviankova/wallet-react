@@ -15,7 +15,6 @@ authRouter.post(
     ],
     async (request, response) => {
         try {
-            console.log(errors)
             const errors = validationResult(request);
 
             if (!errors.isEmpty()) {

@@ -1,0 +1,11 @@
+.root {
+  margin: 3em auto 0;
+
+  .item input {
+    border-bottom: none;
+
+    &:focus {
+      border-bottom: none !important;
+    }
+  }
+}
