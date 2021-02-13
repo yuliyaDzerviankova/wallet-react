@@ -1,18 +1,18 @@
 import {Redirect, Route, Switch} from "react-router-dom";
-import OperationsPage from "./pages/OperationsPage";
-import SettingsPage from "./pages/SettingsPage/SettingsPage";
-import AuthPage from "./pages/AuthPage/AuthPage";
-import BillsPage from "./pages/BillsPage";
-import CategoriesPage from "./pages/CategoriesPage";
+import Operations from "./components/operations/operations";
+import Settings from "./components/settings/settings";
+import Auth from "./components/auth/auth";
+import Bills from "./components/bills/bills";
+import Categories from "./components/categories/categories";
 
 export const useRoutes = (isAuthenticated: boolean) => {
     if (isAuthenticated) {
         return (
             <Switch>
-                <Route exact path='/operations' component={OperationsPage}/>
-                <Route path='/settings' component={SettingsPage} exact/>
-                <Route path='/bills' component={BillsPage} exact/>
-                <Route path='/categories' component={CategoriesPage} exact/>
+                <Route exact path='/operations' component={Operations}/>
+                <Route path='/settings' component={Settings} exact/>
+                <Route path='/bills' component={Bills} exact/>
+                <Route path='/categories' component={Categories} exact/>
                 <Redirect to='/operations'/>
             </Switch>
         )
@@ -21,7 +21,7 @@ export const useRoutes = (isAuthenticated: boolean) => {
     return (
         <Switch>
             <Route path='/' exact>
-                <AuthPage/>
+                <Auth/>
             </Route>
         </Switch>
     )

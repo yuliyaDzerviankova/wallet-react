@@ -62,7 +62,15 @@ userRouter.get(
     async (request, response) => {
         try {
             const users = await User.find({});
-            response.status(200).json(users);
+            const filter = users.map(user => {
+                return {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    wallets: user.wallets
+                }
+            });
+            response.status(200).json(filter);
         } catch (e) {
             errorHandler(response, e);
         }
@@ -75,12 +83,12 @@ userRouter.get(
         try {
             const {user} = request;
             const {
-                _id,
+                id,
                 email,
                 name,
                 wallets
             } = await User
-                .findById({_id: user.id})
+                .findById(user.userId)
                 .populate({
                     path: 'wallets',
                     populate: {
@@ -100,7 +108,7 @@ userRouter.get(
                     },
                 });
             response.status(200).json({
-                id: _id,
+                id,
                 email,
                 name,
                 wallets

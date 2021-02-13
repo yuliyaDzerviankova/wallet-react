@@ -2,7 +2,7 @@ import {Button, Card, CardActions, CardContent, TextField} from '@material-ui/co
 import React from 'react';
 import './settings.scss';
 
-export default function SettingsPage() {
+export default function Settings() {
     return (
         <form>
             <Card variant="outlined" className="root">

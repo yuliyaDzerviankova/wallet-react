@@ -11,9 +11,10 @@ walletRouter.post(
     auth,
     async (request, response) => {
         try {
-            const {walletType, start_balance} = request.body;
+            const {walletType, start_balance, note} = request.body;
             const wallet = await new Wallet({
                 walletType,
+                note,
                 start_balance,
                 user: request.user.id
             });

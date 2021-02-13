@@ -2,9 +2,11 @@ import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../context/AuthContext";
 import {useHttp} from "../../hooks/http.hook";
 import {useMessage} from "../../hooks/message.hook";
+import {useHistory} from "react-router-dom";
 
 const Login = () => {
     const auth = useContext(AuthContext);
+    const history = useHistory();
     const {loading, error, request, clearError} = useHttp();
     const message = useMessage();
     const [form, setForm] = useState({
@@ -32,6 +34,7 @@ const Login = () => {
                 {...form}
             );
             auth.login(data.token, data.userId);
+            history.push('/main');
         } catch (e) {
         }
     };

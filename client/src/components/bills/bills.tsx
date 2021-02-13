@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function BillsPage() {
+export default function Bills() {
     return (
         <div>Bills Page</div>
     );
