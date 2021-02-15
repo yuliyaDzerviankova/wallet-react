@@ -20,12 +20,12 @@ walletRouter.post(
             });
             wallet.save();
             await User.findByIdAndUpdate(
-                request.user.id,
+                request.user.userId,
                 {
                     $push: {
                         wallets: wallet
                     }
-                }, {new: true, useFindAndModify: true});
+                }, {new: true, useFindAndModify: false});
             response.status(200).json(wallet);
         } catch (e) {
             errorHandler(response, e);

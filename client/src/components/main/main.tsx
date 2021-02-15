@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useState} from "react";
+import React, {ChangeEvent, FunctionComponent, useEffect, useState} from "react";
 import './main.scss';
 import {Navbar} from "../navbar/navbar";
 import {Route, Switch} from "react-router-dom";
@@ -16,7 +16,22 @@ interface Props {
 }
 
 const Main: FunctionComponent<Props> = props => {
-    const [wallets, setWallets] = useState([]);
+    const [wallets, setWallets] = useState([{
+        start_balance: 0,
+        balance: 0,
+        profits_cost: 0,
+        expenses_cost: 0,
+        profits: [],
+        expenses: [],
+        id: "",
+        walletType: {
+            id: '',
+            name: ''
+        },
+        note: "",
+        start_date: ""
+
+    }]);
     const [usedWallet, setUsedWallet] = useState({});
     const userData = JSON.parse(sessionStorage.getItem('userData') as string) || '';
 
@@ -28,10 +43,18 @@ const Main: FunctionComponent<Props> = props => {
                         'Authorization': `Bearer ${userData.token}`
                     }
                 }).then(({data}) => {
-                console.log(data)
+                if (data.wallets.length !== 0) {
+                    setWallets(data.wallets);
+                    setUsedWallet(wallets[0]);
+                    console.log(wallets)
+                }
             });
         }
-    }, [wallets]);
+    }, []);
+
+    const changeWallet = (event:  ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
+        // setUsedWallet(event.target.value);
+    };
 
     return (
         <div className="container">
@@ -39,12 +62,21 @@ const Main: FunctionComponent<Props> = props => {
             <FormControl className="wallets-list">
                 <InputLabel id="wallets">Choose wallet</InputLabel>
                 <Select
-                    // className="wallets-list"
                     labelId="wallets"
+                    value={usedWallet}
+                    onChange={changeWallet}
                 >
-                    <MenuItem className="item" value="1">Wallet 1</MenuItem>
-                    <MenuItem className="item" value="2">Wallet 2</MenuItem>
-                    <MenuItem className="item" value="3">Wallet 3</MenuItem>
+                    {wallets && wallets.map(wallet => {
+                        return (
+                            <MenuItem
+                                key={wallet.id}
+                                className="item"
+                                value={wallet}
+                            >
+                                {wallet.note || wallet.walletType.name}
+                            </MenuItem>
+                        )
+                    })}
                 </Select>
             </FormControl>
             <Switch>

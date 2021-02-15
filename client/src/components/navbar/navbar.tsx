@@ -11,6 +11,7 @@ export const Navbar = () => {
     const logout = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         event.preventDefault();
         auth.logout();
+        sessionStorage.clear();
         history.push('/');
     };
 

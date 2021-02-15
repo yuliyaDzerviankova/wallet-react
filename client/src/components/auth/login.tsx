@@ -12,6 +12,7 @@ const Login = () => {
     const [form, setForm] = useState({
         email: '', password: ''
     });
+    console.log(history)
 
     useEffect(() => {
         message(error);
@@ -34,10 +35,10 @@ const Login = () => {
                 {...form}
             );
             auth.login(data.token, data.userId);
-            sessionStorage.setItem('userData', {
+            sessionStorage.setItem('userData', JSON.stringify({
                 userId: data.userId,
                 token: data.token
-            });
+            }));
             history.push('/main');
         } catch (e) {
         }
