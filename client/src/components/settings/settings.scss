@@ -1,11 +1,23 @@
 .root {
   margin: 3em auto 0;
+  max-width: 40%;
 
-  .item input {
-    border-bottom: none;
+  .item {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
 
-    &:focus {
-      border-bottom: none !important;
+    > div {
+      width: 100%;
+    }
+
+    input {
+      border-bottom: none;
+      width: 100%;
+
+      &:focus {
+        border-bottom: none !important;
+      }
     }
   }
 }

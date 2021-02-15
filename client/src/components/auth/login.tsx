@@ -34,6 +34,10 @@ const Login = () => {
                 {...form}
             );
             auth.login(data.token, data.userId);
+            sessionStorage.setItem('userData', {
+                userId: data.userId,
+                token: data.token
+            });
             history.push('/main');
         } catch (e) {
         }
