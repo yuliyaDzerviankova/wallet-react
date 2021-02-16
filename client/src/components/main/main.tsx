@@ -30,7 +30,6 @@ const Main: FunctionComponent<Props> = props => {
         },
         note: "",
         start_date: ""
-
     }]);
     const [usedWallet, setUsedWallet] = useState({});
     const userData = JSON.parse(sessionStorage.getItem('userData') as string) || '';
@@ -52,7 +51,7 @@ const Main: FunctionComponent<Props> = props => {
         }
     }, []);
 
-    const changeWallet = (event:  ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
+    const changeWallet = (event: ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
         // setUsedWallet(event.target.value);
     };
 
@@ -65,13 +64,14 @@ const Main: FunctionComponent<Props> = props => {
                     labelId="wallets"
                     value={usedWallet}
                     onChange={changeWallet}
+                    native
                 >
                     {wallets && wallets.map(wallet => {
                         return (
                             <MenuItem
                                 key={wallet.id}
                                 className="item"
-                                value={wallet}
+                                // value={wallet}
                             >
                                 {wallet.note || wallet.walletType.name}
                             </MenuItem>
