@@ -35,6 +35,7 @@ const Main: FunctionComponent<Props> = props => {
     const [usedWallet, setUsedWallet] = useState({
         _id: '',
         note: '',
+        balance: 0,
         prevState: {_id: '', note: ''} || null
     });
 
@@ -69,34 +70,41 @@ const Main: FunctionComponent<Props> = props => {
     return (
         <div className="container">
             <Navbar/>
-            <FormControl className="wallets-list">
-                <InputLabel htmlFor="wallets">Choose wallet</InputLabel>
-                <Select
-                    id="wallets"
-                    value={usedWallet._id}
-                    onChange={(event: React.ChangeEvent<{ name?: string | undefined; value: unknown }>) => {
-                        let wallet = wallets.find(wallet => wallet._id === event.target.value);
-                        setUsedWallet({
-                            // @ts-ignore
-                            _id: event.target.value,
-                            // @ts-ignore
-                            note: wallet.note
-                        });
-                    }}
-                >
-                    {wallets && wallets.map((wallet, index) => {
-                        return (
-                            <MenuItem
-                                key={wallet._id}
-                                className="item"
-                                value={wallet._id}
-                            >
-                                {wallet.note}
-                            </MenuItem>
-                        )
-                    })}
-                </Select>
-            </FormControl>
+            <div className="current-wallet">
+                <div className="block">
+                    <span>Баланс: {usedWallet.balance}</span>
+                </div>
+                <FormControl className="wallets-list">
+                    <InputLabel htmlFor="wallets">Choose wallet</InputLabel>
+                    <Select
+                        id="wallets"
+                        value={usedWallet._id}
+                        onChange={(event: React.ChangeEvent<{ name?: string | undefined; value: unknown }>) => {
+                            let wallet = wallets.find(wallet => wallet._id === event.target.value);
+                            setUsedWallet({
+                                // @ts-ignore
+                                _id: event.target.value,
+                                // @ts-ignore
+                                note: wallet.note,
+                                // @ts-ignore
+                                balance: wallet.balance
+                            });
+                        }}
+                    >
+                        {wallets && wallets.map((wallet, index) => {
+                            return (
+                                <MenuItem
+                                    key={wallet._id}
+                                    className="item"
+                                    value={wallet._id}
+                                >
+                                    {wallet.note}
+                                </MenuItem>
+                            )
+                        })}
+                    </Select>
+                </FormControl>
+            </div>
             <Switch>
                 <Route path={`${props.match.url}/operations`} component={Operations}/>
                 <Route path={`${props.match.url}/settings`} component={Settings}/>

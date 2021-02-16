@@ -1,7 +1,8 @@
 const {Router} = require("express");
-const {errorHandler} = require("../utils/errorHandler");
+const errorHandler = require("../utils/errorHandler");
 const ProfitType = require('../models/ProfitType');
 const Icon = require('../models/Icon');
+const auth = require("../middleware/auth.js");
 
 const profitTypeRouter = Router();
 
@@ -43,15 +44,19 @@ profitTypeRouter.delete(
 
 profitTypeRouter.post(
     '/add',
+    auth,
     async (request, response) => {
         try {
             const {name, icon} = request.body;
             const profitType = await new ProfitType({
-                name, icon
+                name, icon, isPublic: true
             });
             profitType.save();
-            const iconView = await new Icon({icon, isUsed: true});
-            updateIcons({body: iconView});
+            await Icon.findOneAndUpdate(
+                {icon},
+                {$set: {icon, isUsed: true}},
+                {returnOriginal: false},
+            );
             response.status(201).json(profitType);
         } catch (e) {
             errorHandler(response, e);

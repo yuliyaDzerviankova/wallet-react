@@ -1,11 +1,18 @@
 .container {
-  .wallets-list {
-    margin: 20px 20px 0;
-    width: 10%;
-    padding: 5px 0;
-    align-self: flex-end;
+  .current-wallet {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 0;
 
-    .item {
+    .wallets-list {
+      width: 10%;
+      padding: 5px 0;
+      align-self: flex-end;
+
+      .item {
+      }
     }
   }
+
 }

@@ -8,6 +8,11 @@ const profitTypeScheme = new Schema({
     icon: {
         type: String,
         required: true
+    },
+    isPublic: {
+        type: String,
+        required: true,
+        default: false
     }
 }, {versionKey: false});
 
