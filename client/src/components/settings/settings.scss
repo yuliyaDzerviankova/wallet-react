@@ -7,16 +7,41 @@
     width: 100%;
     margin-bottom: 10px;
 
+    &.error {
+      fieldset {
+        border: 2px solid red;
+      }
+    }
+
     > div {
       width: 100%;
     }
 
     input {
       border-bottom: none;
+
       width: 100%;
 
       &:focus {
         border-bottom: none !important;
+      }
+    }
+  }
+
+  .buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    span {
+      font-weight: bold;
+
+      &.success-edit {
+        color: green;
+      }
+
+      &.error-edit {
+        color: red;
       }
     }
   }

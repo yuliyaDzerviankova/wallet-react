@@ -12,7 +12,6 @@ const Login = () => {
     const [form, setForm] = useState({
         email: '', password: ''
     });
-    console.log(history)
 
     useEffect(() => {
         message(error);
@@ -39,7 +38,7 @@ const Login = () => {
                 userId: data.userId,
                 token: data.token
             }));
-            history.push('/main');
+            history.push('/main/operations');
         } catch (e) {
         }
     };

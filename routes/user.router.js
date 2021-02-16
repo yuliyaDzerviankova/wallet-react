@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const {Router} = require("express");
 const User = require('../models/User');
@@ -7,18 +6,29 @@ const errorHandler = require("../utils/errorHandler");
 const auth = require("../middleware/auth.js");
 
 userRouter.put(
-    '/update/:id',
+    '/update',
+    auth,
     async (request, response) => {
         try {
             if (!request.params) return response.sendStatus(400);
 
-            const {id} = request.params;
+            const {userId} = request.user;
             const {body} = request;
-            const user = await User.findByIdAndUpdate(
-                {_id: id},
+            const {
+                id,
+                email,
+                name,
+                wallets
+            } = await User.findByIdAndUpdate(
+                {_id: userId},
                 {$set: {...body}},
                 {returnOriginal: false});
-            response.status(200).json(user);
+            response.status(200).json({
+                id,
+                email,
+                name,
+                wallets
+            });
         } catch (e) {
             errorHandler(response, e);
         }

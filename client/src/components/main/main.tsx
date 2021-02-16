@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FunctionComponent, useEffect, useState} from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import './main.scss';
 import {Navbar} from "../navbar/navbar";
 import {Route, Switch} from "react-router-dom";
@@ -8,6 +8,7 @@ import Bills from "../bills/bills";
 import Categories from "../categories/categories";
 import {FormControl, InputLabel, MenuItem, Select} from "@material-ui/core";
 import axios from "axios";
+import {log} from "util";
 
 interface Props {
     match: {
@@ -23,7 +24,7 @@ const Main: FunctionComponent<Props> = props => {
         expenses_cost: 0,
         profits: [],
         expenses: [],
-        id: "",
+        _id: "",
         walletType: {
             id: '',
             name: ''
@@ -31,7 +32,16 @@ const Main: FunctionComponent<Props> = props => {
         note: "",
         start_date: ""
     }]);
-    const [usedWallet, setUsedWallet] = useState({});
+    const [usedWallet, setUsedWallet] = useState({
+        _id: '',
+        note: '',
+        prevState: {_id: '', note: ''} || null
+    });
+
+    useEffect(() => {
+        console.log(usedWallet)
+    }, [usedWallet]);
+
     const userData = JSON.parse(sessionStorage.getItem('userData') as string) || '';
 
     useEffect(() => {
@@ -42,16 +52,17 @@ const Main: FunctionComponent<Props> = props => {
                         'Authorization': `Bearer ${userData.token}`
                     }
                 }).then(({data}) => {
-                if (data.wallets.length !== 0) {
+                if (data.wallets) {
+                    setUsedWallet(data.wallets[0]);
                     setWallets(data.wallets);
-                    setUsedWallet(wallets[0]);
-                    console.log(wallets)
                 }
             });
         }
     }, []);
 
-    const changeWallet = (event: ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
+
+    const changeWallet = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+        console.log(event)
         // setUsedWallet(event.target.value);
     };
 
@@ -59,21 +70,28 @@ const Main: FunctionComponent<Props> = props => {
         <div className="container">
             <Navbar/>
             <FormControl className="wallets-list">
-                <InputLabel id="wallets">Choose wallet</InputLabel>
+                <InputLabel htmlFor="wallets">Choose wallet</InputLabel>
                 <Select
-                    labelId="wallets"
-                    value={usedWallet}
-                    onChange={changeWallet}
-                    native
+                    id="wallets"
+                    value={usedWallet._id}
+                    onChange={(event: React.ChangeEvent<{ name?: string | undefined; value: unknown }>) => {
+                        let wallet = wallets.find(wallet => wallet._id === event.target.value);
+                        setUsedWallet({
+                            // @ts-ignore
+                            _id: event.target.value,
+                            // @ts-ignore
+                            note: wallet.note
+                        });
+                    }}
                 >
-                    {wallets && wallets.map(wallet => {
+                    {wallets && wallets.map((wallet, index) => {
                         return (
                             <MenuItem
-                                key={wallet.id}
+                                key={wallet._id}
                                 className="item"
-                                // value={wallet}
+                                value={wallet._id}
                             >
-                                {wallet.note || wallet.walletType.name}
+                                {wallet.note}
                             </MenuItem>
                         )
                     })}

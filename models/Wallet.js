@@ -7,7 +7,8 @@ const walletScheme = new Schema({
         required: true
     },
     note: {
-        type: String
+        type: String,
+        required: true
     },
     start_balance: {
         type: Number,
