@@ -1,0 +1,38 @@
+.container {
+  max-height: 93vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 3em;
+
+  .card {
+    padding: 1em;
+    width: 100%;
+
+    .row {
+      width: 50%;
+
+      h1 {
+        margin: 0;
+      }
+    }
+
+    .item {
+      display: block;
+      margin: 10px 0;
+
+      div {
+        width: 100%;
+      }
+    }
+
+    .buttons {
+      margin-top: 20px;
+    }
+
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  }
+}

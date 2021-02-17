@@ -21,7 +21,7 @@ export const useRoutes = (isAuthenticated: boolean) => {
     return (
         <Switch>
             <Route path='/' exact>
-                <Auth/>
+                {/*<Auth/>*/}
             </Route>
         </Switch>
     )

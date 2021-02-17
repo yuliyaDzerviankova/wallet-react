@@ -1,7 +1,7 @@
 import React, {FunctionComponent, useEffect, useState} from "react";
 import './main.scss';
 import {Navbar} from "../navbar/navbar";
-import {Route, Switch} from "react-router-dom";
+import {Route, Switch, useHistory} from "react-router-dom";
 import Operations from "../operations/operations";
 import Settings from "../settings/settings";
 import Bills from "../bills/bills";
@@ -38,10 +38,7 @@ const Main: FunctionComponent<Props> = props => {
         balance: 0,
         prevState: {_id: '', note: ''} || null
     });
-
-    useEffect(() => {
-        console.log(usedWallet)
-    }, [usedWallet]);
+    const history = useHistory();
 
     const userData = JSON.parse(sessionStorage.getItem('userData') as string) || '';
 
@@ -58,6 +55,8 @@ const Main: FunctionComponent<Props> = props => {
                     setWallets(data.wallets);
                 }
             });
+        } else {
+            history.push('/');
         }
     }, []);
 
@@ -68,7 +67,7 @@ const Main: FunctionComponent<Props> = props => {
     };
 
     return (
-        <div className="container">
+        <div className="main-container">
             <Navbar/>
             <div className="current-wallet">
                 <div className="block">

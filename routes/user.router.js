@@ -14,6 +14,7 @@ userRouter.put(
 
             const {userId} = request.user;
             const {body} = request;
+            const hashedPassword = await bcrypt.hash(body.password, 12);
             const {
                 id,
                 email,
@@ -21,7 +22,7 @@ userRouter.put(
                 wallets
             } = await User.findByIdAndUpdate(
                 {_id: userId},
-                {$set: {...body}},
+                {$set: {...body, password: hashedPassword || body.password}},
                 {returnOriginal: false});
             response.status(200).json({
                 id,

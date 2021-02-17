@@ -15,6 +15,7 @@ export default function Categories() {
 
     const [profitTypes, setProfitTypes] = useState([]);
     const [expenseTypes, setExpenseTypes] = useState([]);
+    const [icons, setIcons] = useState([]);
 
     const getProfitTypes = () => {
         axios.get('/api/profitsType')
@@ -27,18 +28,23 @@ export default function Categories() {
     const getExpenseTypes = () => {
         axios.get('/api/expensesType')
             .then(({data}) => {
+                setExpenseTypes(data);
                 console.log(data)
+            });
+    };
+
+    const getIcons = () => {
+        axios.get('/api/icons')
+            .then(({data}) => {
+                setIcons(data);
             });
     };
 
     useEffect(() => {
         getProfitTypes();
-    }, []);
-
-    useEffect(() => {
         getExpenseTypes();
-    }, [expenseTypes]);
-
+        getIcons();
+    }, []);
 
     return (
         <div className="categories">
@@ -71,6 +77,13 @@ export default function Categories() {
                         </List> :
                         <span>List is empty</span>
                 }
+            </div>
+            <div className="icons">
+                <ul style={{listStyleType: 'none'}}>
+                    {icons && icons.map(({_id, icon}) => {
+                        return <li key={_id}><Icon>{icon}</Icon></li>
+                    })}
+                </ul>
             </div>
             <div className="list expenses">
                 {
