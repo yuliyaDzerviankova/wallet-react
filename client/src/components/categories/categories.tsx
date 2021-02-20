@@ -1,6 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, {ChangeEvent, SetStateAction, useEffect, useState} from 'react';
 import './categories.scss';
-import {Icon, List, ListItem, ListItemIcon, ListItemSecondaryAction} from "@material-ui/core";
+import {
+    Button, Card, CardContent,
+    FormControl,
+    Icon,
+    Input, InputLabel,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemSecondaryAction, MenuItem,
+    Select, TextField, Typography
+} from "@material-ui/core";
 import EditIcon from '@material-ui/icons/EditOutlined';
 import axios from "axios";
 
@@ -15,7 +25,17 @@ export default function Categories() {
 
     const [profitTypes, setProfitTypes] = useState([]);
     const [expenseTypes, setExpenseTypes] = useState([]);
-    const [icons, setIcons] = useState([]);
+    const [icons, setIcons] = useState([{
+        _id: '',
+        icon: ''
+    }]);
+    const [name, setName] = useState('');
+    const [selectedIcon, setSelectedIcon] = useState({
+        _id: '',
+        icon: ''
+    });
+    const [title, setTitle] = useState('');
+    const [showAdd, setShowAdd] = useState(false);
 
     const getProfitTypes = () => {
         axios.get('/api/profitsType')
@@ -46,10 +66,22 @@ export default function Categories() {
         getIcons();
     }, []);
 
+    const changeHandle = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        setName(event.target.value);
+    }
+
     return (
         <div className="categories">
             <div className="list profits">
-                <h3>Доходы</h3>
+                <h3>
+                    Доходы
+                    <Icon
+                        onClick={() => {
+                            setTitle('доход');
+                            setShowAdd(true);
+                        }}
+                    >add</Icon>
+                </h3>
                 {
                     profitTypes.length ?
                         <List>
@@ -78,14 +110,72 @@ export default function Categories() {
                         <span>List is empty</span>
                 }
             </div>
-            <div className="icons">
-                <ul style={{listStyleType: 'none'}}>
-                    {icons && icons.map(({_id, icon}) => {
-                        return <li key={_id}><Icon>{icon}</Icon></li>
-                    })}
-                </ul>
-            </div>
+            {
+                showAdd &&
+                <Card className="add-category">
+                    <Typography gutterBottom variant="h5" component="h2">Добавить {title}</Typography>
+                    <Icon
+                        className="close"
+                        onClick={() => {
+                            setTitle('');
+                            setShowAdd(false);
+                        }}
+                    >close</Icon>
+                    <FormControl>
+                        <InputLabel htmlFor="icons">Choose icon</InputLabel>
+                        <Select
+                            id="icons"
+                            value={selectedIcon._id}
+                            onChange={(event: React.ChangeEvent<{ name?: string | undefined; value: unknown }>) => {
+                                const icon = icons.find(icon => icon._id === event.target.value);
+                                setSelectedIcon({
+                                    // @ts-ignore
+                                    _id: event.target.value,
+                                    // @ts-ignore
+                                    note: wallet.note,
+                                    // @ts-ignore
+                                    balance: wallet.balance
+                                });
+                            }}
+                        >
+                            {icons.map(({_id, icon}) => {
+                                return <MenuItem key={_id}>{icon}</MenuItem>
+                            })}
+                        </Select>
+                        <TextField
+                            name="name"
+                            type="text"
+                            label="Name"
+                            variant="outlined"
+                            onChange={changeHandle}
+                            style={{margin: '10px 0'}}
+                        />
+                        <Button
+                            size="medium"
+                            color="primary"
+                            variant="contained"
+                        >Добавить</Button>
+                    </FormControl>
+                </Card>
+            }
+            {/*<div className="icons">*/}
+            {/*    <ul style={{listStyleType: 'none'}}>*/}
+            {/*        {icons && icons.map(({_id, icon}) => {*/}
+            {/*            return <li key={_id}><Icon>{icon}</Icon></li>*/}
+            {/*        })}*/}
+            {/*    </ul>*/}
+            {/*</div>*/}
             <div className="list expenses">
+                <h3>
+                    Расходы
+                    <Icon
+                        onClick={() => {
+                            setTitle('расход');
+                            setShowAdd(true);
+                        }}
+                    >add</Icon>
+
+                </h3>
                 {
                     expenseTypes.length ?
                         <List>

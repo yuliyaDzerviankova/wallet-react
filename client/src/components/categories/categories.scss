@@ -5,24 +5,64 @@
   justify-content: space-around;
 
   .list {
-    border: 2px solid #123;
-    border-radius: 4px;
-
     h3 {
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      span {
+        margin-left: 10px;
+        border-radius: 50%;
+        padding: 5px;
+        transition: .5s;
+
+        &:hover {
+          color: #fff;
+          cursor: pointer;
+        }
+      }
     }
 
     &.profits {
-      border-color: green;
+      h3 {
+        span {
+          &:hover {
+            background: green;
+          }
+        }
+      }
     }
 
     &.expenses {
-      border-color: red;
+      h3 {
+        span {
+          &:hover {
+            background: red;
+          }
+        }
+      }
     }
 
     .item {
       display: flex;
     }
 
+  }
+
+  .add-category {
+    padding: 20px;
+    position: relative;
+
+    .close {
+      position: absolute;
+      right: 10px;
+      top: 5px;
+      transition: .5s;
+
+      &:hover {
+        cursor: pointer;
+        transform: scale(1.2);
+      }
+    }
   }
 }
