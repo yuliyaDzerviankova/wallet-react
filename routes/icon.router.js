@@ -38,7 +38,7 @@ iconRouter.get(
     '/',
     async (request, response) => {
         try {
-            const icons = await Icon.find();
+            const icons = await Icon.find({isUsed: false});
             response.status(200).json(icons);
         } catch (e) {
             errorHandler(response, e);

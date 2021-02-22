@@ -1,18 +1,23 @@
-import React, {ChangeEvent, SetStateAction, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './categories.scss';
 import {
-    Button, Card, CardContent,
+    Button,
+    Card,
     FormControl,
     Icon,
-    Input, InputLabel,
+    InputLabel,
     List,
     ListItem,
     ListItemIcon,
-    ListItemSecondaryAction, MenuItem,
-    Select, TextField, Typography
+    ListItemSecondaryAction,
+    MenuItem,
+    Select,
+    TextField,
+    Typography
 } from "@material-ui/core";
 import EditIcon from '@material-ui/icons/EditOutlined';
 import axios from "axios";
+import {log} from "util";
 
 class MaterialIcon extends React.Component<{ icon: string }> {
     render() {
@@ -41,7 +46,6 @@ export default function Categories() {
         axios.get('/api/profitsType')
             .then(({data}) => {
                 setProfitTypes(data);
-                console.log(data)
             });
     };
 
@@ -49,7 +53,6 @@ export default function Categories() {
         axios.get('/api/expensesType')
             .then(({data}) => {
                 setExpenseTypes(data);
-                console.log(data)
             });
     };
 
@@ -57,6 +60,7 @@ export default function Categories() {
         axios.get('/api/icons')
             .then(({data}) => {
                 setIcons(data);
+                setSelectedIcon(data[0]);
             });
     };
 
@@ -69,6 +73,14 @@ export default function Categories() {
     const changeHandle = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setName(event.target.value);
     }
+
+    const add = () => {
+        const data = {
+            name,
+            selectedIcon
+        };
+        console.log(data);
+    };
 
     return (
         <div className="categories">
@@ -127,19 +139,24 @@ export default function Categories() {
                             id="icons"
                             value={selectedIcon._id}
                             onChange={(event: React.ChangeEvent<{ name?: string | undefined; value: unknown }>) => {
-                                const icon = icons.find(icon => icon._id === event.target.value);
-                                setSelectedIcon({
-                                    // @ts-ignore
-                                    _id: event.target.value,
-                                    // @ts-ignore
-                                    note: wallet.note,
-                                    // @ts-ignore
-                                    balance: wallet.balance
-                                });
+                                const icon = icons.find(({_id, icon}) => _id === event.target.value);
+                                if (icon) {
+                                    setSelectedIcon({
+                                        // @ts-ignore
+                                        _id: event.target.value || null,
+                                        // @ts-ignore
+                                        icon: icon
+                                    });
+                                }
                             }}
                         >
                             {icons.map(({_id, icon}) => {
-                                return <MenuItem key={_id}>{icon}</MenuItem>
+                                return <MenuItem
+                                    key={_id}
+                                    value={_id}
+                                >
+                                    <Icon>{icon}</Icon>
+                                </MenuItem>
                             })}
                         </Select>
                         <TextField
@@ -154,17 +171,11 @@ export default function Categories() {
                             size="medium"
                             color="primary"
                             variant="contained"
+                            onClick={add}
                         >Добавить</Button>
                     </FormControl>
                 </Card>
             }
-            {/*<div className="icons">*/}
-            {/*    <ul style={{listStyleType: 'none'}}>*/}
-            {/*        {icons && icons.map(({_id, icon}) => {*/}
-            {/*            return <li key={_id}><Icon>{icon}</Icon></li>*/}
-            {/*        })}*/}
-            {/*    </ul>*/}
-            {/*</div>*/}
             <div className="list expenses">
                 <h3>
                     Расходы
